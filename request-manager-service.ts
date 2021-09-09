@@ -27,7 +27,7 @@ export class RequestManagerService {
             this.expressAppService.post('/' + path, (req, res) => {
                 if (req.headers && req.headers.authorization) {
                     const token = req.headers.authorization;
-                    this.securityService.canUserWithSessionTokenMakeRequest(token, path)
+                    this.securityService.authorizeRequest(token, path)
                         .then(result => {
                             if (result.authorized) {
                                 this.makeRequest(method, req, result.session, res);
