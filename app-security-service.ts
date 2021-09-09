@@ -9,7 +9,7 @@ export class AppSecurityService {
 
     }
 
-    public canUserWithSessionTokenMakeRequest(token: any, path: string): Promise<AuthorizationResponseDto> {
+    public canUserWithSessionTokenMakeRequest(token: string, path: string): Promise<AuthorizationResponseDto> {
         return Promise.resolve({
             session: null,
             authorized: true
