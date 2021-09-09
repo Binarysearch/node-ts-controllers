@@ -27,25 +27,30 @@ export class RequestManagerService {
             this.expressAppService.post('/' + path, (req, res) => {
                 if (req.headers && req.headers.authorization) {
                     const token = req.headers.authorization;
-                    this.sessionsService.getByToken(token).then(session => {
-                        this.callMethod(method, path, req, res, session);
-                    });
+                    this.securityService.canUserWithSessionTokenMakeRequest(token, path)
+                        .then(result => {
+                            if (result.authorized) {
+                                this.makeRequest(method, req, result.session, res);
+                            } else {
+                                res.status(401);
+                                res.json({ httpStatusCode: 401, description: 'Unauthorized' });
+                            }
+                        })
+                        .catch(error => {
+                            if (error.status) {
+                                res.status(error.status);
+                            }
+                            else {
+                                res.status(500);
+                            }
+
+                            res.json(error);
+                        });
                 } else {
-                    this.callMethod(method, path, req, res, null);
+                    res.status(401);
+                    res.json({ httpStatusCode: 401, description: 'Unauthorized' });
                 }
             });
-        });
-    }
-
-    private callMethod(method: (body: any, session?: SessionData) => Promise<any>, path: string, req: any, res: any, session: SessionData) {
-        const request = path;
-        this.securityService.canSessionMakeRequest(session, request).then((canMakeRequest) => {
-            if (canMakeRequest) {
-                this.makeRequest(method, req, session, res);
-            } else {
-                res.status(401);
-                res.json({ httpStatusCode: 401, description: 'Unauthorized' });
-            }
         });
     }
 
