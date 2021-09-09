@@ -25,31 +25,26 @@ export class RequestManagerService {
     public registerAppPostRequestMappings() {
         this.postMappings.forEach((method, path) => {
             this.expressAppService.post('/' + path, (req, res) => {
-                if (req.headers && req.headers.authorization) {
-                    const token = req.headers.authorization;
-                    this.securityService.authorizeRequest(token, path)
-                        .then(result => {
-                            if (result.authorized) {
-                                this.makeRequest(method, req, result.session, res);
-                            } else {
-                                res.status(401);
-                                res.json({ httpStatusCode: 401, description: 'Unauthorized' });
-                            }
-                        })
-                        .catch(error => {
-                            if (error.status) {
-                                res.status(error.status);
-                            }
-                            else {
-                                res.status(500);
-                            }
+                const token = req.headers.authorization;
+                this.securityService.authorizeRequest(token, path)
+                    .then(result => {
+                        if (result.authorized) {
+                            this.makeRequest(method, req, result.session, res);
+                        } else {
+                            res.status(401);
+                            res.json({ httpStatusCode: 401, description: 'Unauthorized' });
+                        }
+                    })
+                    .catch(error => {
+                        if (error.status) {
+                            res.status(error.status);
+                        }
+                        else {
+                            res.status(500);
+                        }
 
-                            res.json(error);
-                        });
-                } else {
-                    res.status(401);
-                    res.json({ httpStatusCode: 401, description: 'Unauthorized' });
-                }
+                        res.json(error);
+                    });
             });
         });
     }
