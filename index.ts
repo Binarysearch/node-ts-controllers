@@ -5,3 +5,4 @@ export * from './controller';
 export * from './express-app-service';
 export * from './request-manager-service';
 export * from './SessionData';
+export * from './authorization-response-dto';

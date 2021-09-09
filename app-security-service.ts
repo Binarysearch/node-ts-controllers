@@ -1,10 +1,6 @@
 import { Injectable } from "@piros/ioc";
-import { SessionData } from "./SessionData";
+import { SessionData, AuthorizationResponseDto } from ".";
 
-export interface AuthorizationResponseDto { 
-    authorized: boolean; 
-    session: SessionData; 
-}
 
 @Injectable
 export class AppSecurityService {
