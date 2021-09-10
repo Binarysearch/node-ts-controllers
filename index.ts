@@ -6,3 +6,4 @@ export * from './express-app-service';
 export * from './request-manager-service';
 export * from './SessionData';
 export * from './authorization-response-dto';
+export * from './sql-query-builder';
