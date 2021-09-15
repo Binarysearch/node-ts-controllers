@@ -73,6 +73,8 @@ export class SqlBuilder<FilterableField extends string, SortableField extends st
                 return `unaccent(${this.getFilterField(condition.field)}) ${this.getSqlOperator(condition.operator)} unaccent($${this.params.length})`;
             } else if (condition.operator === 'IS_NULL') {
                 return `${this.getFilterField(condition.field)} IS NULL`;
+            }  else if (condition.operator === 'JSONB_CONTAINS_ALL') {
+                return `${this.getFilterField(condition.field)} ${this.getSqlOperator(condition.operator)} $${this.params.length}::jsonb`;
             } else {
                 this.params.push(condition.value);
                 return `${this.getFilterField(condition.field)} ${this.getSqlOperator(condition.operator)} $${this.params.length}`;
@@ -114,6 +116,7 @@ export class SqlBuilder<FilterableField extends string, SortableField extends st
             case "LIKE": return "LIKE";
             case "IN": return "IN";
             case "NOT_IN": return "NOT IN";
+            case "JSONB_CONTAINS_ALL": return "@>";
         }
         return operator;
     }
