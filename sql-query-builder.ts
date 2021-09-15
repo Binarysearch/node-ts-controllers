@@ -74,6 +74,7 @@ export class SqlBuilder<FilterableField extends string, SortableField extends st
             } else if (condition.operator === 'IS_NULL') {
                 return `${this.getFilterField(condition.field)} IS NULL`;
             }  else if (condition.operator === 'JSONB_CONTAINS_ALL') {
+                this.params.push(JSON.stringify(condition.value));
                 return `${this.getFilterField(condition.field)} ${this.getSqlOperator(condition.operator)} $${this.params.length}::jsonb`;
             } else {
                 this.params.push(condition.value);
