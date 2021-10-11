@@ -1,7 +1,6 @@
 import { Injectable } from "@piros/ioc";
 
 import { AppSecurityService } from "./app-security-service";
-import { AppSessionsService } from "./app-sessions-service";
 import { ExpressAppService } from "./express-app-service";
 import { SessionData } from "./SessionData";
 
@@ -11,7 +10,6 @@ export class RequestManagerService {
     private postMappings: Map<string, (body: any, session?: SessionData) => Promise<any>> = new Map();
 
     constructor(
-        private sessionsService: AppSessionsService,
         private securityService: AppSecurityService,
         private expressAppService: ExpressAppService
     ) {
