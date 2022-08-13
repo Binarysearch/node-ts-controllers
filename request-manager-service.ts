@@ -36,12 +36,15 @@ export class RequestManagerService {
                     .catch(error => {
                         if (error.status) {
                             res.status(error.status);
-                        }
-                        else {
+                        } else {
                             res.status(500);
                         }
 
-                        res.json(error);
+                        if (error.errorBody) {
+                            res.json(error.errorBody);
+                        } else {
+                            res.json(error);
+                        }
                     });
             });
         });
