@@ -29,7 +29,12 @@ export class Application {
         });
     }
     
-    public start(port: number): void {
+    public async close(): Promise<void> {
+        const expressAppService: ExpressAppService = this.injector.resolve(ExpressAppService);
+        return expressAppService.close();
+    }
+
+    public start(port: number, cb?: () => void): void {
         const expressAppService: ExpressAppService = this.injector.resolve(ExpressAppService);
         const requestManagerService: RequestManagerService = this.injector.resolve(RequestManagerService);
         
@@ -41,6 +46,6 @@ export class Application {
         
         requestManagerService.registerAppPostRequestMappings();
 
-        expressAppService.listen(port);
+        expressAppService.listen(port, cb);
     }
 }

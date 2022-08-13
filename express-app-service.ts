@@ -22,9 +22,16 @@ export class ExpressAppService {
         this._server = http.createServer(this._app);
     }
 
-    public listen(port: number) {
-        this._server.listen(port, () => {
-            console.log(`Server started on port ${port} :)`);
+    public listen(port: number, cb?: () => void) {
+        this._server.listen(port, cb);
+    }
+
+    public async close(): Promise<void> {
+        return new Promise(resolve => {
+            this._server.close(() => {
+                console.log('Server closed.');
+                resolve();
+            });
         });
     }
 
