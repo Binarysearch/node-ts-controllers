@@ -10,15 +10,14 @@ export class ExpressAppService {
     private _server: http.Server;
 
 
-    constructor(){
+    constructor() {
         this._app = express();
         this._app.use(express.json({ strict: false, limit: '10mb' }));
-        this._app.use(function(req, res, next) {
+        this._app.use(function (req, res, next) {
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
             next();
         });
-        
         this._server = http.createServer(this._app);
     }
 
